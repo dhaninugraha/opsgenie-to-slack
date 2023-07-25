@@ -1,0 +1,57 @@
+{
+	"LOGGER_NAME": "opsgenie-to-slack",
+	"LOG_FORMAT": {
+		"PLAIN": "%(name)s - %(asctime)s - %(levelname)s - %(message)s"
+	},
+	"LOG_FILE_NAME": "opsgenie-to-slack.log",
+	"LOG_FILE_ROTATE_WHEN": "midnight",
+	"LOG_BACKUP_COUNT": 7,
+	"LOG_USE_UTC": true,
+	"OPSGENIE": {
+		"GET_ON_CALLS": {
+			"METHOD": "GET",
+			"URL": "https://api.opsgenie.com/v2/schedules/:scheduleIdentifier:/on-calls",
+			"HEADERS": {
+				"Authorization": "GenieKey xxx-xxx-xxx-xxx-xxx"
+			},
+			"QUERY_PARAMS": {
+				"scheduleIdentifierType": "name",
+				"flat": "true"
+			},
+			"PATH_VARIABLES": {
+				":scheduleIdentifier:": ["Schedule 1", "Schedule 2", "Schedule N"]
+			}
+		}
+	},
+	"SLACK": {
+		"GET_USER_GROUP": {
+			"METHOD": "GET",
+			"URL": "https://slack.com/api/usergroups.list",
+			"HEADERS": {
+				"Authorization": "Bearer xoxb-xxx-xxx-xxx"
+			},
+			"QUERY_PARAMS": {
+				"include_count": "false",
+				"include_disabled": "false",
+				"include_users": "false"
+			},
+			"FILTER": {
+				"handle": "use-group-handle-here"
+			}
+		},
+		"GET_USER_BY_EMAIL": {
+			"METHOD": "GET",
+			"URL": "https://slack.com/api/users.lookupByEmail",
+			"HEADERS": {
+				"Authorization": "Bearer xoxb-xxx-xxx-xxx"
+			}
+		},
+		"SET_USER_GROUP_MEMBERS": {
+			"METHOD": "POST",
+			"URL": "https://slack.com/api/usergroups.users.update",
+			"HEADERS": {
+				"Authorization": "Bearer xoxb-xxx-xxx-xxx"
+			}
+		}
+	}
+}
