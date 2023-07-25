@@ -22,6 +22,3 @@ The script was born out of our users' lack of visibility to the our team's OpsGe
 
 # To-dos
 - Consolidate Slack API key into singular key:value under `SLACK`
-
-# Licensing
-See `LICENSE` for the original license, and `LICENSE.md` for the additional licensing clauses
