@@ -64,7 +64,7 @@ logging.basicConfig(level=log_level, handlers=log_handlers)
 log = logging.getLogger(LOGGER_NAME)
 """ end of logging configuration """
 
-def call_api(method, url, headers, query_params):
+def call_api(method: str, url: str, headers: dict, query_params: dict) -> requests.Response:
 	with requests.Session() as s:
 		log.debug(f'Request: {method} {url}')
 
@@ -79,7 +79,7 @@ def call_api(method, url, headers, query_params):
 
 		return resp
 
-def opsgenie_get_current_on_calls(config):
+def opsgenie_get_current_on_calls(config: dict) -> list:
 	current_on_calls = []
 
 	for schedule_identifier in config['OPSGENIE']['GET_ON_CALLS']['PATH_VARIABLES'][':scheduleIdentifier:']:
@@ -99,7 +99,7 @@ def opsgenie_get_current_on_calls(config):
 
 	return current_on_calls
 
-def slack_get_user_group_id(config):
+def slack_get_user_group_id(config: dict) -> tuple[str, str]:
 	log.info(f'Getting group ID for Slack user group @{config["SLACK"]["GET_USER_GROUP"]["FILTER"]["handle"]}')
 	log.debug(f'User group filter condition: {config["SLACK"]["GET_USER_GROUP"]["FILTER"]}')
 
@@ -133,7 +133,7 @@ def slack_get_user_group_id(config):
 
 	return user_group_id, team_id
 
-def slack_get_user_ids_by_emails(config, current_on_call_emails):
+def slack_get_user_ids_by_emails(config: dict, current_on_call_emails: list) -> list:
 	log.info(f'Getting associated Slack user ID from the following emails: {current_on_call_emails}')
 
 	if type(current_on_call_emails) != list:
@@ -164,7 +164,7 @@ def slack_get_user_ids_by_emails(config, current_on_call_emails):
 
 	return(user_ids)
 
-def slack_set_user_group_members(config, user_group_id, team_id, user_ids):
+def slack_set_user_group_members(config: dict, user_group_id: str, team_id: str, user_ids: list):
 	log.info(f'Updating Slack group {user_group_id} in team {team_id} with the following users: {user_ids}')
 
 	resp = call_api(
@@ -177,7 +177,7 @@ def slack_set_user_group_members(config, user_group_id, team_id, user_ids):
 	log.debug(resp.status_code)
 	log.debug(resp.json())
 
-	if resp.status_code == request.codes.ok:
+	if resp.status_code == requests.codes.ok:
 		if resp.json()['ok']:
 			log.info('Successfully updated the user group')
 
